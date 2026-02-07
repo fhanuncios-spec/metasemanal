@@ -3,24 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#000000" />
   <title>Meta Semanal — Almoço Grátis!</title>
   <style>
     :root{
-      --bg:#ffffff;
-      --card:#ffffff;
-      --muted:#4b5563;
-      --text:#111827;
-      --line:rgba(17,24,39,.12);
+      /* Dark theme */
+      --bg:#06060a;
+      --text:#f3f6ff;
+      --muted:#a7b0c6;
+      --line:rgba(255,255,255,.10);
 
-      --primary:#0b5cff;
-      --primary2:#7c3aed;
+      /* Stylish containers */
+      --card:#0b0f1c;
+      --card2:#0a1227;
 
-      --good:#16a34a;
-      --warn:#d97706;
-      --bad:#dc2626;
+      /* Accents */
+      --primary:#4f8cff;
+      --primary2:#a855f7;
 
-      --shadow: 0 10px 30px rgba(17,24,39,.10);
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+
+      --shadow: 0 16px 40px rgba(0,0,0,.55);
       --radius: 18px;
     }
 
@@ -29,7 +34,10 @@
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: var(--bg);
+      background:
+        radial-gradient(900px 500px at 12% 0%, rgba(79,140,255,.18), transparent 60%),
+        radial-gradient(900px 500px at 92% 10%, rgba(168,85,247,.18), transparent 60%),
+        var(--bg);
       color:var(--text);
     }
 
@@ -59,7 +67,7 @@
       font-size: 20px;
       letter-spacing:.2px;
       line-height:1.2;
-      color: #0f172a;
+      color: var(--text);
     }
 
     .subtitle{
@@ -76,14 +84,14 @@
       padding:10px 12px;
       border:1px solid var(--line);
       border-radius: 999px;
-      background: rgba(11,92,255,.06);
-      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
       white-space:nowrap;
       font-size:13px;
-      color: #0f172a;
+      color: var(--text);
     }
 
-    .pill strong{ color: #0f172a; font-weight: 900; }
+    .pill strong{ color: var(--text); font-weight: 950; }
 
     .grid{
       display:grid;
@@ -100,7 +108,7 @@
     }
 
     .card{
-      background: var(--card);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border:1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -114,21 +122,22 @@
       justify-content:space-between;
       gap: 10px;
       border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(11,92,255,.10), rgba(124,58,237,.06));
+      background:
+        linear-gradient(180deg, rgba(79,140,255,.18), rgba(168,85,247,.10));
     }
 
     .cardHeader h2{
       margin:0;
       font-size: 14px;
       letter-spacing:.2px;
-      color:#0f172a;
+      color: var(--text);
       font-weight: 950;
     }
 
     .cardHeader p{
       margin:6px 0 0;
       font-size:12px;
-      color: #1f2937;
+      color: rgba(243,246,255,.85);
       line-height:1.35;
     }
 
@@ -148,7 +157,7 @@
       font-size: 20px;
       font-weight: 950;
       letter-spacing: .2px;
-      color:#0f172a;
+      color: var(--text);
     }
     .small{
       font-size: 12px;
@@ -159,10 +168,10 @@
       height: 14px;
       border-radius: 999px;
       border:1px solid var(--line);
-      background: rgba(17,24,39,.04);
+      background: rgba(255,255,255,.05);
       overflow:hidden;
       position:relative;
-      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
     }
     .bar > .fill{
       height:100%;
@@ -175,9 +184,10 @@
     .motivation{
       margin-top: 10px;
       padding: 12px 12px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.12);
       border-radius: 14px;
-      background: rgba(17,24,39,.03);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       color: var(--text);
       line-height:1.35;
       font-size: 13px;
@@ -194,19 +204,19 @@
       display:grid;
       place-items:center;
       font-weight:950;
-      color:#fff;
-      background: var(--primary);
+      color:#0b0f1c;
+      background: rgba(255,255,255,.90);
     }
-    .badge.good{ background: var(--good); }
-    .badge.warn{ background: var(--warn); }
-    .badge.bad{ background: var(--bad); }
-    .badge.neutral{ background: var(--primary); }
+    .badge.good{ background: rgba(34,197,94,.95); color:#07110a; }
+    .badge.warn{ background: rgba(245,158,11,.95); color:#120b03; }
+    .badge.bad{ background: rgba(239,68,68,.95); color:#140606; }
+    .badge.neutral{ background: rgba(79,140,255,.95); color:#050816; }
 
     /* Collapsible (details/summary) */
     details{
       border:1px solid var(--line);
       border-radius: 16px;
-      background: rgba(17,24,39,.02);
+      background: rgba(255,255,255,.03);
       overflow:hidden;
     }
     summary{
@@ -217,7 +227,7 @@
       justify-content:space-between;
       gap:10px;
       padding: 12px 12px;
-      background: rgba(17,24,39,.03);
+      background: rgba(255,255,255,.04);
       user-select:none;
     }
     summary::-webkit-details-marker{ display:none; }
@@ -234,15 +244,15 @@
       display:grid;
       place-items:center;
       border:1px solid var(--line);
-      background:#fff;
-      color:#0f172a;
+      background: rgba(255,255,255,.06);
+      color: var(--text);
       font-weight: 950;
       flex: 0 0 auto;
     }
     details[open] .chev{ transform: rotate(90deg); }
     .sumTitle{
       font-weight: 950;
-      color:#0f172a;
+      color: var(--text);
       font-size: 13px;
       letter-spacing:.2px;
       white-space:nowrap;
@@ -295,16 +305,16 @@
       width:100%;
       padding: 12px 12px;
       border-radius: 14px;
-      border:1px solid var(--line);
-      background: #fff;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(5,8,22,.6);
       color: var(--text);
       outline:none;
       font-size: 14px;
-      box-shadow: 0 1px 0 rgba(17,24,39,.05) inset;
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
     }
     input[type="number"]:focus{
-      border-color: rgba(11,92,255,.55);
-      box-shadow: 0 0 0 4px rgba(11,92,255,.16);
+      border-color: rgba(79,140,255,.65);
+      box-shadow: 0 0 0 4px rgba(79,140,255,.18);
     }
 
     /* Sidebar stats */
@@ -320,16 +330,15 @@
     }
 
     @media (min-width: 520px){
-      .statGrid{
-        grid-template-columns: 1fr 1fr;
-      }
+      .statGrid{ grid-template-columns: 1fr 1fr; }
     }
 
     .stat{
       padding: 12px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
-      background: rgba(17,24,39,.02);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
     }
     .stat .k{
       margin:0;
@@ -341,7 +350,7 @@
       font-size:18px;
       font-weight: 950;
       letter-spacing: .2px;
-      color:#0f172a;
+      color: var(--text);
     }
 
     .actions{
@@ -353,9 +362,9 @@
 
     button{
       appearance:none;
-      border:1px solid var(--line);
-      background: rgba(17,24,39,.04);
-      color: #0f172a;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
       padding: 12px 12px;
       border-radius: 14px;
       font-weight: 950;
@@ -371,12 +380,12 @@
 
     button:active{ transform: translateY(1px); }
     .btnPrimary{
-      border-color: rgba(11,92,255,.30);
-      background: linear-gradient(180deg, rgba(11,92,255,.20), rgba(11,92,255,.08));
+      border-color: rgba(79,140,255,.35);
+      background: linear-gradient(180deg, rgba(79,140,255,.22), rgba(79,140,255,.10));
     }
     .btnDanger{
-      border-color: rgba(220,38,38,.25);
-      background: linear-gradient(180deg, rgba(220,38,38,.18), rgba(220,38,38,.06));
+      border-color: rgba(239,68,68,.30);
+      background: linear-gradient(180deg, rgba(239,68,68,.22), rgba(239,68,68,.10));
     }
 
     .footerNote{
@@ -400,16 +409,17 @@
       flex-direction:column;
       gap:2px;
     }
-    .historyHead .left strong{ color:#0f172a; }
+    .historyHead .left strong{ color: var(--text); }
     .historyList{
       display:grid;
       gap:10px;
     }
     .weekItem{
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
       padding: 12px;
-      background: rgba(17,24,39,.02);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       display:grid;
       gap:8px;
     }
@@ -422,7 +432,7 @@
     }
     .weekTop .wtitle{
       font-weight: 950;
-      color:#0f172a;
+      color: var(--text);
       letter-spacing:.2px;
     }
     .tag{
@@ -431,13 +441,15 @@
       gap:6px;
       padding:6px 10px;
       border-radius: 999px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.14);
       font-size:12px;
       font-weight: 950;
       white-space:nowrap;
+      background: rgba(255,255,255,.05);
     }
-    .tag.good{ background: rgba(22,163,74,.12); color: var(--good); border-color: rgba(22,163,74,.25); }
-    .tag.bad{ background: rgba(220,38,38,.10); color: var(--bad); border-color: rgba(220,38,38,.22); }
+    .tag.good{ background: rgba(34,197,94,.14); color: #7CFFB1; border-color: rgba(34,197,94,.30); }
+    .tag.bad{ background: rgba(239,68,68,.12); color: #FF9AA7; border-color: rgba(239,68,68,.28); }
+
     .weekGrid{
       display:grid;
       grid-template-columns: 1fr;
@@ -447,13 +459,13 @@
       .weekGrid{ grid-template-columns: 1fr 1fr 1fr; }
     }
     .mini{
-      border:1px dashed rgba(17,24,39,.18);
+      border:1px dashed rgba(255,255,255,.16);
       border-radius: 14px;
       padding: 10px;
-      background: rgba(255,255,255,.7);
+      background: rgba(0,0,0,.20);
     }
     .mini .k{ margin:0; font-size:11px; color: var(--muted); }
-    .mini .v{ margin:6px 0 0; font-size:14px; font-weight: 950; color:#0f172a; }
+    .mini .v{ margin:6px 0 0; font-size:14px; font-weight: 950; color: var(--text); }
 
     .toast{
       position: fixed;
@@ -463,8 +475,8 @@
       max-width: min(560px, calc(100% - 24px));
       padding: 12px 14px;
       border-radius: 14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,25,.88);
       backdrop-filter: blur(10px);
       box-shadow: var(--shadow);
       color: var(--text);
@@ -485,7 +497,7 @@
     <header>
       <div class="titleRow">
         <div>
-          <h1>Meta Semanal (Seg–Sáb) — Almoço grátis se bater! 🍽️</h1>
+          <h1>Meta Semanal (Seg–Sáb) — Almoço grátis se bater! 🍽️🔥</h1>
           <p class="subtitle">
             Interface clean: seções e dias começam fechados. Você pode lançar dia a dia ou lançar o total da semana por categoria.
           </p>
@@ -502,7 +514,7 @@
         <div class="cardHeader">
           <div>
             <h2>Semana atual</h2>
-            <p>Progresso + lançamentos (salva automaticamente no navegador).</p>
+            <p>Progresso + lançamentos (salva automaticamente no navegador). 📈</p>
           </div>
           <div class="pill">📅 <strong id="weekLabel">Semana</strong></div>
         </div>
@@ -523,10 +535,10 @@
           </div>
 
           <div class="motivation" role="status" aria-live="polite">
-            <div class="badge neutral" id="motivationBadge">💡</div>
+            <div class="badge neutral" id="motivationBadge">⚡</div>
             <div>
-              <div style="font-weight:950; margin-bottom:4px; color:#0f172a;" id="motivationTitle">Bora começar!</div>
-              <div id="motivationText">Preencha os valores do dia. Cada real conta — consistência vence. 💪</div>
+              <div style="font-weight:950; margin-bottom:4px;" id="motivationTitle">Vamo pra cima! 💥</div>
+              <div id="motivationText">Hoje é dia de fazer acontecer. Foco, ritmo e execução — o almoço grátis é nosso! 🍽️🔥</div>
             </div>
           </div>
 
@@ -537,34 +549,34 @@
             <summary>
               <div class="sumLeft">
                 <div class="chev">›</div>
-                <div class="sumTitle">Entrada rápida: lançar TOTAL da semana por categoria</div>
+                <div class="sumTitle">Entrada rápida: lançar TOTAL da semana por categoria 🧾</div>
               </div>
               <div class="sumMeta" id="quickMeta">Fechado</div>
             </summary>
             <div class="panel">
               <div class="subtitle" style="margin:0;">
-                Se você esqueceu de anotar os dias e só tem o total no último dia, preencha os 3 valores (um por categoria) e aplique.
-                Isso vai preencher tudo no <strong>Sábado</strong> (para refletir que você anotou no fim).
+                Se você só tem o total no último dia, preencha os 3 valores (um por categoria) e aplique.
+                Isso vai preencher tudo no <strong>Sábado</strong> (como “fechamento” da semana). ✅
               </div>
 
               <div class="quickGrid">
                 <label>
-                  Consertos (R$)
+                  Consertos (R$) 🔧
                   <input id="qConsertos" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
                 </label>
                 <label>
-                  Acessórios (R$)
+                  Acessórios (R$) 🎧
                   <input id="qAcessorios" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
                 </label>
                 <label>
-                  Venda de Aparelhos (R$)
+                  Venda de Aparelhos (R$) 📱
                   <input id="qAparelhos" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
                 </label>
-                <button class="btnPrimary" id="applyQuickBtn">Aplicar</button>
+                <button class="btnPrimary" id="applyQuickBtn">Aplicar 🚀</button>
               </div>
 
               <div class="subtitle" style="margin:0;">
-                Dica: se quiser lançar um total único, preencha apenas uma categoria e deixe as outras em 0.
+                Dica: quer lançar um total único? Preencha só uma categoria e deixe as outras em 0. 🎯
               </div>
             </div>
           </details>
@@ -581,7 +593,7 @@
         <div class="cardHeader">
           <div>
             <h2>Resumo & Histórico</h2>
-            <p>Categoria, médias e semanas anteriores.</p>
+            <p>Categoria, médias e semanas anteriores. 🗂️</p>
           </div>
         </div>
 
@@ -589,29 +601,29 @@
           <div class="stats">
             <div class="statGrid">
               <div class="stat">
-                <p class="k">Consertos</p>
+                <p class="k">Consertos 🔧</p>
                 <p class="v" id="sumConsertos">R$ 0,00</p>
               </div>
               <div class="stat">
-                <p class="k">Acessórios</p>
+                <p class="k">Acessórios 🎧</p>
                 <p class="v" id="sumAcessorios">R$ 0,00</p>
               </div>
               <div class="stat" style="grid-column: 1 / -1;">
-                <p class="k">Venda de Aparelhos</p>
+                <p class="k">Venda de Aparelhos 📱</p>
                 <p class="v" id="sumAparelhos">R$ 0,00</p>
               </div>
             </div>
 
             <div class="stat">
-              <p class="k">Média por dia (dias preenchidos)</p>
+              <p class="k">Média por dia (dias preenchidos) 📊</p>
               <p class="v" id="avgPerDay">R$ 0,00</p>
-              <p class="k" style="margin-top:8px;">Ritmo necessário (média/dia para bater)</p>
+              <p class="k" style="margin-top:8px;">Ritmo necessário (média/dia para bater) ⏱️</p>
               <p class="v" id="neededPerDay">R$ 0,00</p>
             </div>
 
             <div class="actions">
-              <button class="btnPrimary" id="closeWeekBtn">Fechar semana e salvar no histórico</button>
-              <button class="btnDanger" id="resetBtn">Zerar semana atual</button>
+              <button class="btnPrimary" id="closeWeekBtn">Fechar semana e salvar no histórico 🏁</button>
+              <button class="btnDanger" id="resetBtn">Zerar semana atual 🧨</button>
             </div>
 
             <!-- HISTORY -->
@@ -620,7 +632,7 @@
                 <strong>Histórico</strong>
                 <span class="subtitle" style="margin:0;">Semanas fechadas (Semana 1, 2, 3...)</span>
               </div>
-              <button class="btnDanger" id="clearHistoryBtn" style="width:auto;">Limpar histórico</button>
+              <button class="btnDanger" id="clearHistoryBtn" style="width:auto;">Limpar histórico 🗑️</button>
             </div>
 
             <div class="historyList" id="historyList"></div>
@@ -656,7 +668,7 @@
       { key: "aparelhos", label: "Venda de aparelhos" },
     ];
 
-    const STORAGE_KEY = "meta_semanal_v3"; // atualizado
+    const STORAGE_KEY = "meta_semanal_v4_dark"; // atualizado
 
     // ===== Helpers =====
     const brl = (n) =>
@@ -724,7 +736,7 @@
       const base = defaultState();
       if(!obj || typeof obj !== "object") return base;
 
-      // v3
+      // v4
       if(obj.current && obj.history && obj.weekNumber) return obj;
 
       // tenta aproveitar algo antigo
@@ -755,60 +767,60 @@
 
     let state = loadState();
 
-    // ===== Motivation =====
+    // ===== Motivation (mais impacto + emojis) =====
     function motivationFor(pct, remaining){
       const m = {
         badgeClass: "neutral",
-        badge: "💡",
-        title: "Bora começar!",
-        text: "Preencha os valores do dia. Cada real conta — consistência vence. 💪"
+        badge: "⚡",
+        title: "Vamo pra cima! 💥",
+        text: "Hoje é dia de executar sem desculpa: atendimento afiado, oferta na mesa e fechamento no caixa. O almoço grátis é NOSSO! 🍽️🔥"
       };
 
       if (pct >= 100){
         m.badgeClass = "good";
-        m.badge = "🎉";
-        m.title = "META BATIDA!!! ALMOÇO GRÁTIS! 🏆🍽️";
-        m.text = "Que performance! Semana MONSTRA! Parabéns, time — agora é comemorar com tudo. 🚀🔥";
+        m.badge = "🏆";
+        m.title = "META BATIDA!!! É CAMPEÃO! 🎉🍽️";
+        m.text = "TIME BRABO! Foi na raça e na consistência. Agora é comemorar: almoço grátis garantido! 🚀🔥🥳";
         return m;
       }
 
       if (pct >= 90){
         m.badgeClass = "good";
-        m.badge = "⚡";
-        m.title = "Tá na mão! Último sprint!";
-        m.text = `Falta pouco: ${brl(remaining)}. Bora acelerar agora e garantir o almoço grátis! 🔥`;
+        m.badge = "🚨";
+        m.title = "FALTAM MIGALHAS! ÚLTIMO ATAQUE! 🚀";
+        m.text = `Falta só ${brl(remaining)}. Sem freio agora: puxa oferta, fecha combo e garante a vitória! 🥊🔥`;
         return m;
       }
 
       if (pct >= 75){
         m.badgeClass = "neutral";
         m.badge = "🚀";
-        m.title = "75% — reta final!";
-        m.text = `Vocês estão voando! Faltam ${brl(remaining)}. Mantém a pegada e fecha forte. 👊`;
+        m.title = "RETA FINAL — MANTÉM A PRESSÃO! 💪";
+        m.text = `Já estamos em 75%+. Falta ${brl(remaining)}. Não tira o pé: constância + fechamento = almoço na mesa! 🍽️⚡`;
         return m;
       }
 
       if (pct >= 50){
         m.badgeClass = "neutral";
         m.badge = "💥";
-        m.title = "50% — metade do caminho!";
-        m.text = `Boa! Já foi metade. Constância agora: empurra até o fim. Falta ${brl(remaining)}.`;
+        m.title = "META NO RADAR — AGORA ACELERA! 🏎️";
+        m.text = `Metade feita! Falta ${brl(remaining)}. Bora subir ticket médio e fechar sem deixar cliente “pra depois”! 🔥📈`;
         return m;
       }
 
       if (pct >= 25){
         m.badgeClass = "neutral";
         m.badge = "✅";
-        m.title = "25% — começou bem!";
-        m.text = `Ótimo começo! O segredo é repetir: todo dia um pouco. Falta ${brl(remaining)}.`;
+        m.title = "COMEÇO FORTE — CONTINUA NO RITMO! 🎯";
+        m.text = `25%+ já foi! Falta ${brl(remaining)}. Um dia bom puxa o outro — vamos empilhar resultado! 🧱🔥`;
         return m;
       }
 
       if (pct > 0){
         m.badgeClass = "neutral";
         m.badge = "🧠";
-        m.title = "Construindo o ritmo";
-        m.text = `Bom início! Segue lançando e mantendo o passo. Falta ${brl(remaining)}.`;
+        m.title = "RITMO É TUDO — COMEÇA AGORA! ⏱️";
+        m.text = `Primeiros passos feitos. Falta ${brl(remaining)}. Sem ansiedade: foco no próximo cliente e no próximo fechamento! 💪✨`;
       }
       return m;
     }
@@ -822,13 +834,13 @@
       for (const d of DAYS){
         const det = document.createElement("details");
         det.id = `day_${d.key}`;
-        // começa fechado (sem "open")
+        // começa fechado
         const sum = document.createElement("summary");
 
         sum.innerHTML = `
           <div class="sumLeft">
             <div class="chev">›</div>
-            <div class="sumTitle">${d.label}</div>
+            <div class="sumTitle">${d.label} 📌</div>
           </div>
           <div class="sumMeta" id="meta_${d.key}">Total: ${brl(0)}</div>
         `;
@@ -841,7 +853,8 @@
 
         for (const c of CATS){
           const lab = document.createElement("label");
-          lab.textContent = c.label;
+          const emoji = c.key === "consertos" ? "🔧" : (c.key === "acessorios" ? "🎧" : "📱");
+          lab.textContent = `${c.label} ${emoji}`;
 
           const inp = document.createElement("input");
           inp.type = "number";
@@ -869,7 +882,6 @@
     }
 
     function syncDayInputs(){
-      // sincroniza inputs dos detalhes
       for (const d of DAYS){
         const det = document.getElementById(`day_${d.key}`);
         if(!det) continue;
@@ -896,14 +908,12 @@
       const total = vC + vA + vP;
 
       if(total <= 0){
-        showToast("Preencha pelo menos uma categoria.");
+        showToast("Preencha pelo menos uma categoria. ⚠️");
         return;
       }
 
-      // limpa semana antes de aplicar
       state.current.data = blankWeekData();
 
-      // aplica tudo no SÁBADO
       const targetDay = "sab";
       state.current.data[targetDay].consertos = vC;
       state.current.data[targetDay].acessorios = vA;
@@ -912,7 +922,7 @@
       saveState();
       syncDayInputs();
       render();
-      showToast("Totais aplicados na semana ✅");
+      showToast("Totais aplicados na semana ✅🚀");
     });
 
     // ===== History render =====
@@ -925,11 +935,11 @@
         empty.className = "weekItem";
         empty.innerHTML = `
           <div class="weekTop">
-            <div class="wtitle">Nenhuma semana fechada ainda</div>
+            <div class="wtitle">Nenhuma semana fechada ainda 🗂️</div>
             <span class="tag bad">Histórico vazio</span>
           </div>
           <div style="color: var(--muted); font-size: 12px; line-height:1.35;">
-            Feche a semana para salvar no histórico como Semana 1, Semana 2, etc.
+            Feche a semana para salvar no histórico como Semana 1, Semana 2, etc. ✅
           </div>
         `;
         box.appendChild(empty);
@@ -975,15 +985,15 @@
               <p class="v">${hit ? brl(item.total - item.goal) : brl(item.goal - item.total)}</p>
             </div>
             <div class="mini">
-              <p class="k">Consertos</p>
+              <p class="k">Consertos 🔧</p>
               <p class="v">${brl(item.perCat.consertos)}</p>
             </div>
             <div class="mini">
-              <p class="k">Acessórios</p>
+              <p class="k">Acessórios 🎧</p>
               <p class="v">${brl(item.perCat.acessorios)}</p>
             </div>
             <div class="mini">
-              <p class="k">Aparelhos</p>
+              <p class="k">Aparelhos 📱</p>
               <p class="v">${brl(item.perCat.aparelhos)}</p>
             </div>
           </div>
@@ -1016,7 +1026,6 @@
       const needed = daysRemaining > 0 ? remaining / daysRemaining : remaining;
       document.getElementById("neededPerDay").textContent = brl(needed);
 
-      // day metas (totais no summary)
       for (const d of DAYS){
         const meta = document.getElementById(`meta_${d.key}`);
         if(meta) meta.textContent = "Total: " + brl(perDay[d.key]);
@@ -1058,7 +1067,6 @@
       state.weekNumber += 1;
       state.current.data = blankWeekData();
 
-      // também zera inputs da entrada rápida
       document.getElementById("qConsertos").value = "";
       document.getElementById("qAcessorios").value = "";
       document.getElementById("qAparelhos").value = "";
@@ -1067,21 +1075,20 @@
       syncDayInputs();
       render();
 
-      showToast(total >= GOAL ? "META BATIDA! Semana salva 🏆" : "Semana salva — próxima vem forte! 💪");
+      showToast(total >= GOAL ? "META BATIDA! Semana salva 🏆🔥" : "Semana salva — volta mais forte! 💪⚡");
     });
 
     document.getElementById("clearHistoryBtn").addEventListener("click", () => {
       state.history = [];
       saveState();
       render();
-      showToast("Histórico limpo ✅");
+      showToast("Histórico limpo ✅🗑️");
     });
 
     // ===== Init =====
     (function init(){
       state = migrate(state);
 
-      // normaliza estrutura
       state.current = state.current || { data: blankWeekData() };
       state.current.data = state.current.data || blankWeekData();
       for (const d of DAYS){
@@ -1092,10 +1099,7 @@
       }
 
       buildDays();
-
-      // meta label do quick
       quickMeta.textContent = "Fechado";
-
       render();
     })();
   </script>
