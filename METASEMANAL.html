@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Meta Semanal — Almoço Grátis!</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --card:#ffffff;
+      --muted:#4b5563;
+      --text:#111827;
+      --line:rgba(17,24,39,.12);
+
+      --primary:#0b5cff;
+      --primary2:#7c3aed;
+
+      --good:#16a34a;
+      --warn:#d97706;
+      --bad:#dc2626;
+
+      --shadow: 0 10px 30px rgba(17,24,39,.10);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px 14px 28px;
+    }
+
+    header{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin: 6px 0 14px;
+    }
+
+    .titleRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.2px;
+      line-height:1.2;
+      color: #0f172a;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(11,92,255,.06);
+      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+      white-space:nowrap;
+      font-size:13px;
+      color: #0f172a;
+    }
+
+    .pill strong{ color: #0f172a; font-weight: 900; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 860px){
+      .grid{
+        grid-template-columns: 1.15fr .85fr;
+        align-items:start;
+      }
+      h1{ font-size: 22px; }
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .cardHeader{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,92,255,.10), rgba(124,58,237,.06));
+    }
+
+    .cardHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.2px;
+      color:#0f172a;
+      font-weight: 950;
+    }
+
+    .cardHeader p{
+      margin:6px 0 0;
+      font-size:12px;
+      color: #1f2937;
+      line-height:1.35;
+    }
+
+    .cardBody{ padding: 14px; }
+
+    /* Progress */
+    .progressTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .big{
+      font-size: 20px;
+      font-weight: 950;
+      letter-spacing: .2px;
+      color:#0f172a;
+    }
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar{
+      height: 14px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(17,24,39,.04);
+      overflow:hidden;
+      position:relative;
+      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    }
+    .bar > .fill{
+      height:100%;
+      width:0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      transition: width .35s ease;
+    }
+
+    .motivation{
+      margin-top: 10px;
+      padding: 12px 12px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(17,24,39,.03);
+      color: var(--text);
+      line-height:1.35;
+      font-size: 13px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .badge{
+      flex:0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      color:#fff;
+      background: var(--primary);
+    }
+    .badge.good{ background: var(--good); }
+    .badge.warn{ background: var(--warn); }
+    .badge.bad{ background: var(--bad); }
+    .badge.neutral{ background: var(--primary); }
+
+    /* Collapsible (details/summary) */
+    details{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(17,24,39,.02);
+      overflow:hidden;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px;
+      background: rgba(17,24,39,.03);
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sumLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .chev{
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--line);
+      background:#fff;
+      color:#0f172a;
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+    details[open] .chev{ transform: rotate(90deg); }
+    .sumTitle{
+      font-weight: 950;
+      color:#0f172a;
+      font-size: 13px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .sumMeta{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+      flex: 0 0 auto;
+    }
+    .panel{
+      padding: 12px;
+      display:grid;
+      gap:10px;
+    }
+
+    /* Quick entry (inside details) */
+    .quickGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      align-items:end;
+    }
+    @media (min-width: 520px){
+      .quickGrid{ grid-template-columns: 1fr 1fr 1fr auto; }
+    }
+
+    /* Day inputs */
+    .inputs{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    @media (min-width: 520px){
+      .inputs{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    label{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size: 12px;
+      color: var(--muted);
+      min-width: 0;
+    }
+
+    input[type="number"]{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+      box-shadow: 0 1px 0 rgba(17,24,39,.05) inset;
+    }
+    input[type="number"]:focus{
+      border-color: rgba(11,92,255,.55);
+      box-shadow: 0 0 0 4px rgba(11,92,255,.16);
+    }
+
+    /* Sidebar stats */
+    .stats{
+      display:grid;
+      gap:10px;
+    }
+
+    .statGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+
+    @media (min-width: 520px){
+      .statGrid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .stat{
+      padding: 12px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(17,24,39,.02);
+    }
+    .stat .k{
+      margin:0;
+      font-size:12px;
+      color: var(--muted);
+    }
+    .stat .v{
+      margin:6px 0 0;
+      font-size:18px;
+      font-weight: 950;
+      letter-spacing: .2px;
+      color:#0f172a;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(17,24,39,.04);
+      color: #0f172a;
+      padding: 12px 12px;
+      border-radius: 14px;
+      font-weight: 950;
+      font-size: 13px;
+      letter-spacing: .2px;
+      cursor:pointer;
+      width:100%;
+    }
+
+    @media (min-width: 520px){
+      button{ width:auto; }
+    }
+
+    button:active{ transform: translateY(1px); }
+    .btnPrimary{
+      border-color: rgba(11,92,255,.30);
+      background: linear-gradient(180deg, rgba(11,92,255,.20), rgba(11,92,255,.08));
+    }
+    .btnDanger{
+      border-color: rgba(220,38,38,.25);
+      background: linear-gradient(180deg, rgba(220,38,38,.18), rgba(220,38,38,.06));
+    }
+
+    .footerNote{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.35;
+    }
+
+    /* History */
+    .historyHead{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .historyHead .left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .historyHead .left strong{ color:#0f172a; }
+    .historyList{
+      display:grid;
+      gap:10px;
+    }
+    .weekItem{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(17,24,39,.02);
+      display:grid;
+      gap:8px;
+    }
+    .weekTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .weekTop .wtitle{
+      font-weight: 950;
+      color:#0f172a;
+      letter-spacing:.2px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      font-size:12px;
+      font-weight: 950;
+      white-space:nowrap;
+    }
+    .tag.good{ background: rgba(22,163,74,.12); color: var(--good); border-color: rgba(22,163,74,.25); }
+    .tag.bad{ background: rgba(220,38,38,.10); color: var(--bad); border-color: rgba(220,38,38,.22); }
+    .weekGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:8px;
+    }
+    @media (min-width: 520px){
+      .weekGrid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .mini{
+      border:1px dashed rgba(17,24,39,.18);
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(255,255,255,.7);
+    }
+    .mini .k{ margin:0; font-size:11px; color: var(--muted); }
+    .mini .v{ margin:6px 0 0; font-size:14px; font-weight: 950; color:#0f172a; }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 14px;
+      max-width: min(560px, calc(100% - 24px));
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      font-size: 13px;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 50;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="titleRow">
+        <div>
+          <h1>Meta Semanal (Seg–Sáb) — Almoço grátis se bater! 🍽️</h1>
+          <p class="subtitle">
+            Interface clean: seções e dias começam fechados. Você pode lançar dia a dia ou lançar o total da semana por categoria.
+          </p>
+        </div>
+        <div class="pill" aria-label="Meta semanal">
+          🎯 <span>Meta: <strong id="goalLabel">R$ 12.000,00</strong></span>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- Main -->
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Semana atual</h2>
+            <p>Progresso + lançamentos (salva automaticamente no navegador).</p>
+          </div>
+          <div class="pill">📅 <strong id="weekLabel">Semana</strong></div>
+        </div>
+
+        <div class="cardBody">
+          <div class="progressTop">
+            <div>
+              <div class="big" id="totalLabel">R$ 0,00</div>
+              <div class="small">
+                <span id="pctLabel">0%</span> • Falta <span id="remainingLabel">R$ 12.000,00</span>
+              </div>
+            </div>
+            <div class="pill">🏆 Almoço grátis ao atingir <strong>100%</strong></div>
+          </div>
+
+          <div class="bar" aria-label="Barra de progresso">
+            <div class="fill" id="barFill"></div>
+          </div>
+
+          <div class="motivation" role="status" aria-live="polite">
+            <div class="badge neutral" id="motivationBadge">💡</div>
+            <div>
+              <div style="font-weight:950; margin-bottom:4px; color:#0f172a;" id="motivationTitle">Bora começar!</div>
+              <div id="motivationText">Preencha os valores do dia. Cada real conta — consistência vence. 💪</div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <!-- Entrada rápida (FECHADO por padrão) -->
+          <details id="quickDetails">
+            <summary>
+              <div class="sumLeft">
+                <div class="chev">›</div>
+                <div class="sumTitle">Entrada rápida: lançar TOTAL da semana por categoria</div>
+              </div>
+              <div class="sumMeta" id="quickMeta">Fechado</div>
+            </summary>
+            <div class="panel">
+              <div class="subtitle" style="margin:0;">
+                Se você esqueceu de anotar os dias e só tem o total no último dia, preencha os 3 valores (um por categoria) e aplique.
+                Isso vai preencher tudo no <strong>Sábado</strong> (para refletir que você anotou no fim).
+              </div>
+
+              <div class="quickGrid">
+                <label>
+                  Consertos (R$)
+                  <input id="qConsertos" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
+                </label>
+                <label>
+                  Acessórios (R$)
+                  <input id="qAcessorios" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
+                </label>
+                <label>
+                  Venda de Aparelhos (R$)
+                  <input id="qAparelhos" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00" />
+                </label>
+                <button class="btnPrimary" id="applyQuickBtn">Aplicar</button>
+              </div>
+
+              <div class="subtitle" style="margin:0;">
+                Dica: se quiser lançar um total único, preencha apenas uma categoria e deixe as outras em 0.
+              </div>
+            </div>
+          </details>
+
+          <div style="height:12px"></div>
+
+          <!-- Dias (todos FECHADOS por padrão) -->
+          <div id="daysBox" style="display:grid; gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Resumo & Histórico</h2>
+            <p>Categoria, médias e semanas anteriores.</p>
+          </div>
+        </div>
+
+        <div class="cardBody">
+          <div class="stats">
+            <div class="statGrid">
+              <div class="stat">
+                <p class="k">Consertos</p>
+                <p class="v" id="sumConsertos">R$ 0,00</p>
+              </div>
+              <div class="stat">
+                <p class="k">Acessórios</p>
+                <p class="v" id="sumAcessorios">R$ 0,00</p>
+              </div>
+              <div class="stat" style="grid-column: 1 / -1;">
+                <p class="k">Venda de Aparelhos</p>
+                <p class="v" id="sumAparelhos">R$ 0,00</p>
+              </div>
+            </div>
+
+            <div class="stat">
+              <p class="k">Média por dia (dias preenchidos)</p>
+              <p class="v" id="avgPerDay">R$ 0,00</p>
+              <p class="k" style="margin-top:8px;">Ritmo necessário (média/dia para bater)</p>
+              <p class="v" id="neededPerDay">R$ 0,00</p>
+            </div>
+
+            <div class="actions">
+              <button class="btnPrimary" id="closeWeekBtn">Fechar semana e salvar no histórico</button>
+              <button class="btnDanger" id="resetBtn">Zerar semana atual</button>
+            </div>
+
+            <!-- HISTORY -->
+            <div class="historyHead">
+              <div class="left">
+                <strong>Histórico</strong>
+                <span class="subtitle" style="margin:0;">Semanas fechadas (Semana 1, 2, 3...)</span>
+              </div>
+              <button class="btnDanger" id="clearHistoryBtn" style="width:auto;">Limpar histórico</button>
+            </div>
+
+            <div class="historyList" id="historyList"></div>
+
+            <p class="footerNote">
+              ✅ Tudo fica salvo neste navegador (sem servidor). <br/>
+              📌 “Fechar semana” salva a Semana atual no histórico e inicia uma nova semana em branco.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===== Config =====
+    const GOAL = 12000;
+
+    const DAYS = [
+      { key: "seg", label: "Segunda" },
+      { key: "ter", label: "Terça" },
+      { key: "qua", label: "Quarta" },
+      { key: "qui", label: "Quinta" },
+      { key: "sex", label: "Sexta" },
+      { key: "sab", label: "Sábado" },
+    ];
+
+    const CATS = [
+      { key: "consertos", label: "Consertos" },
+      { key: "acessorios", label: "Acessórios" },
+      { key: "aparelhos", label: "Venda de aparelhos" },
+    ];
+
+    const STORAGE_KEY = "meta_semanal_v3"; // atualizado
+
+    // ===== Helpers =====
+    const brl = (n) =>
+      new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n || 0);
+
+    function clamp(n, min, max){ return Math.min(Math.max(n, min), max); }
+
+    function getWeekLabel(){
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2,"0");
+      const mm = String(now.getMonth()+1).padStart(2,"0");
+      return `Semana de ${dd}/${mm}`;
+    }
+
+    function safeNumber(v){
+      const n = Number(v);
+      return Number.isFinite(n) ? Math.max(0, n) : 0;
+    }
+
+    function showToast(msg){
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      window.clearTimeout(showToast._t);
+      showToast._t = window.setTimeout(()=> el.classList.remove("show"), 2200);
+    }
+
+    function sumWeekData(data){
+      let total = 0;
+      const perCat = { consertos:0, acessorios:0, aparelhos:0 };
+      const perDay = {};
+
+      for (const d of DAYS){
+        let dayTotal = 0;
+        for (const c of CATS){
+          const v = safeNumber(data?.[d.key]?.[c.key] ?? 0);
+          dayTotal += v;
+          perCat[c.key] += v;
+        }
+        perDay[d.key] = dayTotal;
+        total += dayTotal;
+      }
+      return { total, perCat, perDay };
+    }
+
+    // ===== State =====
+    function blankWeekData(){
+      const data = {};
+      for (const d of DAYS){
+        data[d.key] = {};
+        for (const c of CATS) data[d.key][c.key] = 0;
+      }
+      return data;
+    }
+
+    function defaultState(){
+      return {
+        weekNumber: 1,
+        current: { data: blankWeekData() },
+        history: [] // items: {weekNumber, closedAt, goal, total, perCat}
+      };
+    }
+
+    function migrate(obj){
+      const base = defaultState();
+      if(!obj || typeof obj !== "object") return base;
+
+      // v3
+      if(obj.current && obj.history && obj.weekNumber) return obj;
+
+      // tenta aproveitar algo antigo
+      if(obj.data){
+        base.current.data = blankWeekData();
+        for (const d of DAYS){
+          for (const c of CATS){
+            base.current.data[d.key][c.key] = safeNumber(obj.data?.[d.key]?.[c.key] ?? 0);
+          }
+        }
+      }
+      return base;
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return defaultState();
+        return migrate(JSON.parse(raw));
+      }catch{
+        return defaultState();
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+
+    // ===== Motivation =====
+    function motivationFor(pct, remaining){
+      const m = {
+        badgeClass: "neutral",
+        badge: "💡",
+        title: "Bora começar!",
+        text: "Preencha os valores do dia. Cada real conta — consistência vence. 💪"
+      };
+
+      if (pct >= 100){
+        m.badgeClass = "good";
+        m.badge = "🎉";
+        m.title = "META BATIDA!!! ALMOÇO GRÁTIS! 🏆🍽️";
+        m.text = "Que performance! Semana MONSTRA! Parabéns, time — agora é comemorar com tudo. 🚀🔥";
+        return m;
+      }
+
+      if (pct >= 90){
+        m.badgeClass = "good";
+        m.badge = "⚡";
+        m.title = "Tá na mão! Último sprint!";
+        m.text = `Falta pouco: ${brl(remaining)}. Bora acelerar agora e garantir o almoço grátis! 🔥`;
+        return m;
+      }
+
+      if (pct >= 75){
+        m.badgeClass = "neutral";
+        m.badge = "🚀";
+        m.title = "75% — reta final!";
+        m.text = `Vocês estão voando! Faltam ${brl(remaining)}. Mantém a pegada e fecha forte. 👊`;
+        return m;
+      }
+
+      if (pct >= 50){
+        m.badgeClass = "neutral";
+        m.badge = "💥";
+        m.title = "50% — metade do caminho!";
+        m.text = `Boa! Já foi metade. Constância agora: empurra até o fim. Falta ${brl(remaining)}.`;
+        return m;
+      }
+
+      if (pct >= 25){
+        m.badgeClass = "neutral";
+        m.badge = "✅";
+        m.title = "25% — começou bem!";
+        m.text = `Ótimo começo! O segredo é repetir: todo dia um pouco. Falta ${brl(remaining)}.`;
+        return m;
+      }
+
+      if (pct > 0){
+        m.badgeClass = "neutral";
+        m.badge = "🧠";
+        m.title = "Construindo o ritmo";
+        m.text = `Bom início! Segue lançando e mantendo o passo. Falta ${brl(remaining)}.`;
+      }
+      return m;
+    }
+
+    // ===== UI build (Days as collapsible) =====
+    const daysBox = document.getElementById("daysBox");
+
+    function buildDays(){
+      daysBox.innerHTML = "";
+
+      for (const d of DAYS){
+        const det = document.createElement("details");
+        det.id = `day_${d.key}`;
+        // começa fechado (sem "open")
+        const sum = document.createElement("summary");
+
+        sum.innerHTML = `
+          <div class="sumLeft">
+            <div class="chev">›</div>
+            <div class="sumTitle">${d.label}</div>
+          </div>
+          <div class="sumMeta" id="meta_${d.key}">Total: ${brl(0)}</div>
+        `;
+
+        const panel = document.createElement("div");
+        panel.className = "panel";
+
+        const inputs = document.createElement("div");
+        inputs.className = "inputs";
+
+        for (const c of CATS){
+          const lab = document.createElement("label");
+          lab.textContent = c.label;
+
+          const inp = document.createElement("input");
+          inp.type = "number";
+          inp.inputMode = "decimal";
+          inp.min = "0";
+          inp.step = "0.01";
+          inp.placeholder = "0,00";
+          inp.value = String(state.current.data[d.key][c.key] ?? 0);
+
+          inp.addEventListener("input", () => {
+            state.current.data[d.key][c.key] = safeNumber(inp.value);
+            saveState();
+            render();
+          });
+
+          lab.appendChild(inp);
+          inputs.appendChild(lab);
+        }
+
+        panel.appendChild(inputs);
+        det.appendChild(sum);
+        det.appendChild(panel);
+        daysBox.appendChild(det);
+      }
+    }
+
+    function syncDayInputs(){
+      // sincroniza inputs dos detalhes
+      for (const d of DAYS){
+        const det = document.getElementById(`day_${d.key}`);
+        if(!det) continue;
+        const inputs = det.querySelectorAll('input[type="number"]');
+        inputs.forEach((inp, idx)=>{
+          const catKey = CATS[idx]?.key;
+          if(!catKey) return;
+          inp.value = String(safeNumber(state.current.data[d.key][catKey]));
+        });
+      }
+    }
+
+    // ===== Quick Entry =====
+    const quickDetails = document.getElementById("quickDetails");
+    const quickMeta = document.getElementById("quickMeta");
+    quickDetails.addEventListener("toggle", () => {
+      quickMeta.textContent = quickDetails.open ? "Aberto" : "Fechado";
+    });
+
+    document.getElementById("applyQuickBtn").addEventListener("click", () => {
+      const vC = safeNumber(document.getElementById("qConsertos").value);
+      const vA = safeNumber(document.getElementById("qAcessorios").value);
+      const vP = safeNumber(document.getElementById("qAparelhos").value);
+      const total = vC + vA + vP;
+
+      if(total <= 0){
+        showToast("Preencha pelo menos uma categoria.");
+        return;
+      }
+
+      // limpa semana antes de aplicar
+      state.current.data = blankWeekData();
+
+      // aplica tudo no SÁBADO
+      const targetDay = "sab";
+      state.current.data[targetDay].consertos = vC;
+      state.current.data[targetDay].acessorios = vA;
+      state.current.data[targetDay].aparelhos  = vP;
+
+      saveState();
+      syncDayInputs();
+      render();
+      showToast("Totais aplicados na semana ✅");
+    });
+
+    // ===== History render =====
+    function renderHistory(){
+      const box = document.getElementById("historyList");
+      box.innerHTML = "";
+
+      if (!state.history.length){
+        const empty = document.createElement("div");
+        empty.className = "weekItem";
+        empty.innerHTML = `
+          <div class="weekTop">
+            <div class="wtitle">Nenhuma semana fechada ainda</div>
+            <span class="tag bad">Histórico vazio</span>
+          </div>
+          <div style="color: var(--muted); font-size: 12px; line-height:1.35;">
+            Feche a semana para salvar no histórico como Semana 1, Semana 2, etc.
+          </div>
+        `;
+        box.appendChild(empty);
+        return;
+      }
+
+      const items = [...state.history].sort((a,b)=> b.weekNumber - a.weekNumber);
+
+      for (const item of items){
+        const pct = clamp((item.total / item.goal) * 100, 0, 999);
+        const hit = item.total >= item.goal;
+
+        const el = document.createElement("div");
+        el.className = "weekItem";
+
+        const date = item.closedAt ? new Date(item.closedAt) : null;
+        const dateLabel = date ? date.toLocaleString("pt-BR") : "-";
+
+        el.innerHTML = `
+          <div class="weekTop">
+            <div>
+              <div class="wtitle">Semana ${item.weekNumber}</div>
+              <div style="color: var(--muted); font-size: 12px; margin-top:2px;">
+                Fechada em: ${dateLabel}
+              </div>
+            </div>
+            <span class="tag ${hit ? "good" : "bad"}">
+              ${hit ? "Meta batida ✅" : "Não bateu ❌"} • ${Math.floor(pct)}%
+            </span>
+          </div>
+
+          <div class="weekGrid">
+            <div class="mini">
+              <p class="k">Total</p>
+              <p class="v">${brl(item.total)}</p>
+            </div>
+            <div class="mini">
+              <p class="k">Meta</p>
+              <p class="v">${brl(item.goal)}</p>
+            </div>
+            <div class="mini">
+              <p class="k">Faltou / Sobrou</p>
+              <p class="v">${hit ? brl(item.total - item.goal) : brl(item.goal - item.total)}</p>
+            </div>
+            <div class="mini">
+              <p class="k">Consertos</p>
+              <p class="v">${brl(item.perCat.consertos)}</p>
+            </div>
+            <div class="mini">
+              <p class="k">Acessórios</p>
+              <p class="v">${brl(item.perCat.acessorios)}</p>
+            </div>
+            <div class="mini">
+              <p class="k">Aparelhos</p>
+              <p class="v">${brl(item.perCat.aparelhos)}</p>
+            </div>
+          </div>
+        `;
+        box.appendChild(el);
+      }
+    }
+
+    // ===== Render =====
+    function render(){
+      const { total, perCat, perDay } = sumWeekData(state.current.data);
+      const pct = clamp((total / GOAL) * 100, 0, 999);
+      const pctShown = Math.floor(pct);
+      const remaining = Math.max(0, GOAL - total);
+
+      document.getElementById("totalLabel").textContent = brl(total);
+      document.getElementById("pctLabel").textContent = `${pctShown}%`;
+      document.getElementById("remainingLabel").textContent = brl(remaining);
+      document.getElementById("barFill").style.width = `${clamp(pct, 0, 100)}%`;
+
+      document.getElementById("sumConsertos").textContent = brl(perCat.consertos);
+      document.getElementById("sumAcessorios").textContent = brl(perCat.acessorios);
+      document.getElementById("sumAparelhos").textContent = brl(perCat.aparelhos);
+
+      const daysWithAny = DAYS.reduce((acc,d)=> acc + (perDay[d.key] > 0 ? 1 : 0), 0);
+      const avg = daysWithAny > 0 ? total / daysWithAny : 0;
+      document.getElementById("avgPerDay").textContent = brl(avg);
+
+      const daysRemaining = Math.max(0, DAYS.length - daysWithAny);
+      const needed = daysRemaining > 0 ? remaining / daysRemaining : remaining;
+      document.getElementById("neededPerDay").textContent = brl(needed);
+
+      // day metas (totais no summary)
+      for (const d of DAYS){
+        const meta = document.getElementById(`meta_${d.key}`);
+        if(meta) meta.textContent = "Total: " + brl(perDay[d.key]);
+      }
+
+      const mot = motivationFor(pct, remaining);
+      const badge = document.getElementById("motivationBadge");
+      badge.className = `badge ${mot.badgeClass}`;
+      badge.textContent = mot.badge;
+      document.getElementById("motivationTitle").textContent = mot.title;
+      document.getElementById("motivationText").textContent = mot.text;
+
+      document.getElementById("weekLabel").textContent = getWeekLabel() + ` • Semana ${state.weekNumber}`;
+      document.getElementById("goalLabel").textContent = brl(GOAL);
+
+      renderHistory();
+    }
+
+    // ===== Actions =====
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      state.current.data = blankWeekData();
+      saveState();
+      syncDayInputs();
+      render();
+      showToast("Semana atual zerada ✅");
+    });
+
+    document.getElementById("closeWeekBtn").addEventListener("click", () => {
+      const { total, perCat } = sumWeekData(state.current.data);
+
+      state.history.push({
+        weekNumber: state.weekNumber,
+        closedAt: new Date().toISOString(),
+        goal: GOAL,
+        total,
+        perCat
+      });
+
+      state.weekNumber += 1;
+      state.current.data = blankWeekData();
+
+      // também zera inputs da entrada rápida
+      document.getElementById("qConsertos").value = "";
+      document.getElementById("qAcessorios").value = "";
+      document.getElementById("qAparelhos").value = "";
+
+      saveState();
+      syncDayInputs();
+      render();
+
+      showToast(total >= GOAL ? "META BATIDA! Semana salva 🏆" : "Semana salva — próxima vem forte! 💪");
+    });
+
+    document.getElementById("clearHistoryBtn").addEventListener("click", () => {
+      state.history = [];
+      saveState();
+      render();
+      showToast("Histórico limpo ✅");
+    });
+
+    // ===== Init =====
+    (function init(){
+      state = migrate(state);
+
+      // normaliza estrutura
+      state.current = state.current || { data: blankWeekData() };
+      state.current.data = state.current.data || blankWeekData();
+      for (const d of DAYS){
+        state.current.data[d.key] = state.current.data[d.key] || {};
+        for (const c of CATS){
+          state.current.data[d.key][c.key] = safeNumber(state.current.data?.[d.key]?.[c.key] ?? 0);
+        }
+      }
+
+      buildDays();
+
+      // meta label do quick
+      quickMeta.textContent = "Fechado";
+
+      render();
+    })();
+  </script>
+</body>
+</html>
