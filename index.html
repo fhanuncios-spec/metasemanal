@@ -13,10 +13,6 @@
       --muted:#a7b0c6;
       --line:rgba(255,255,255,.10);
 
-      /* Stylish containers */
-      --card:#0b0f1c;
-      --card2:#0a1227;
-
       /* Accents */
       --primary:#4f8cff;
       --primary2:#a855f7;
@@ -24,6 +20,11 @@
       --good:#22c55e;
       --warn:#f59e0b;
       --bad:#ef4444;
+
+      /* Category accents */
+      --rep:#60a5fa;      /* reparos */
+      --dev:#a78bfa;      /* aparelhos */
+      --acc:#fbbf24;      /* acessórios */
 
       --shadow: 0 16px 40px rgba(0,0,0,.55);
       --radius: 18px;
@@ -143,6 +144,57 @@
 
     .cardBody{ padding: 14px; }
 
+    /* Top weekly summary */
+    .topSummary{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .topSummaryHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .topSummaryHead .t1{
+      font-weight: 950;
+      letter-spacing:.2px;
+    }
+    .topSummaryGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    @media (min-width: 520px){
+      .topSummaryGrid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .chip{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      padding: 10px;
+      background: rgba(0,0,0,.25);
+      position:relative;
+      overflow:hidden;
+    }
+    .chip::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.18;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      pointer-events:none;
+    }
+    .chip.rep::before{ background: linear-gradient(90deg, var(--rep), rgba(96,165,250,.2)); opacity:.22; }
+    .chip.dev::before{ background: linear-gradient(90deg, var(--dev), rgba(167,139,250,.2)); opacity:.22; }
+    .chip.acc::before{ background: linear-gradient(90deg, var(--acc), rgba(251,191,36,.2)); opacity:.20; }
+    .chip .k{ position:relative; margin:0; font-size:12px; color: var(--muted); }
+    .chip .v{ position:relative; margin:6px 0 0; font-size:16px; font-weight: 950; color: var(--text); }
+    .chip .s{ position:relative; margin:6px 0 0; font-size:12px; color: rgba(243,246,255,.85); }
+
     /* Progress */
     .progressTop{
       display:flex;
@@ -186,8 +238,7 @@
       padding: 12px 12px;
       border:1px solid rgba(255,255,255,.12);
       border-radius: 14px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       color: var(--text);
       line-height:1.35;
       font-size: 13px;
@@ -212,7 +263,7 @@
     .badge.bad{ background: rgba(239,68,68,.95); color:#140606; }
     .badge.neutral{ background: rgba(79,140,255,.95); color:#050816; }
 
-    /* Collapsible (details/summary) */
+    /* Collapsible */
     details{
       border:1px solid var(--line);
       border-radius: 16px;
@@ -271,7 +322,7 @@
       gap:10px;
     }
 
-    /* Quick entry (inside details) */
+    /* Grids */
     .quickGrid{
       display:grid;
       grid-template-columns: 1fr;
@@ -282,7 +333,25 @@
       .quickGrid{ grid-template-columns: 1fr 1fr 1fr auto; }
     }
 
-    /* Day inputs */
+    .mixGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      align-items:end;
+    }
+    @media (min-width: 520px){
+      .mixGrid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .mixGrid2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      align-items:end;
+    }
+    @media (min-width: 520px){
+      .mixGrid2{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+
     .inputs{
       display:grid;
       grid-template-columns: 1fr;
@@ -317,7 +386,6 @@
       box-shadow: 0 0 0 4px rgba(79,140,255,.18);
     }
 
-    /* Sidebar stats */
     .stats{
       display:grid;
       gap:10px;
@@ -328,7 +396,6 @@
       grid-template-columns: 1fr;
       gap:10px;
     }
-
     @media (min-width: 520px){
       .statGrid{ grid-template-columns: 1fr 1fr; }
     }
@@ -337,8 +404,7 @@
       padding: 12px;
       border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
     }
     .stat .k{
       margin:0;
@@ -373,11 +439,9 @@
       cursor:pointer;
       width:100%;
     }
-
     @media (min-width: 520px){
       button{ width:auto; }
     }
-
     button:active{ transform: translateY(1px); }
     .btnPrimary{
       border-color: rgba(79,140,255,.35);
@@ -395,7 +459,6 @@
       line-height:1.35;
     }
 
-    /* History */
     .historyHead{
       display:flex;
       gap:10px;
@@ -418,8 +481,7 @@
       border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
       padding: 12px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       display:grid;
       gap:8px;
     }
@@ -499,7 +561,7 @@
         <div>
           <h1>Meta Semanal (Seg–Sáb) — Almoço grátis se bater! 🍽️🔥</h1>
           <p class="subtitle">
-            Interface clean: seções e dias começam fechados. Você pode lançar dia a dia ou lançar o total da semana por categoria.
+            Agora com <strong>Resumo no topo</strong> + <strong>Estimativa do que vender</strong> para bater a meta. ✅
           </p>
         </div>
         <div class="pill" aria-label="Meta semanal">
@@ -520,6 +582,34 @@
         </div>
 
         <div class="cardBody">
+          <!-- RESUMO NO TOPO -->
+          <div class="topSummary" aria-label="Resumo da semana no topo">
+            <div class="topSummaryHead">
+              <div>
+                <div class="t1">📌 Resumo da semana (até agora)</div>
+                <div class="subtitle" style="margin-top:4px;">Reparos 🔧 • Aparelhos 📱 • Acessórios 🎧</div>
+              </div>
+              <div class="pill">⚡ <span>Progresso: <strong id="topPct">0%</strong></span></div>
+            </div>
+            <div class="topSummaryGrid">
+              <div class="chip rep">
+                <p class="k">🔧 Reparos</p>
+                <p class="v" id="topRep">R$ 0,00</p>
+                <p class="s" id="topRepS">—</p>
+              </div>
+              <div class="chip dev">
+                <p class="k">📱 Aparelhos</p>
+                <p class="v" id="topDev">R$ 0,00</p>
+                <p class="s" id="topDevS">Lucro estimado/unidade: <strong id="topProfitUnit">R$ 400,00</strong></p>
+              </div>
+              <div class="chip acc">
+                <p class="k">🎧 Acessórios</p>
+                <p class="v" id="topAcc">R$ 0,00</p>
+                <p class="s" id="topAccS">—</p>
+              </div>
+            </div>
+          </div>
+
           <div class="progressTop">
             <div>
               <div class="big" id="totalLabel">R$ 0,00</div>
@@ -538,9 +628,88 @@
             <div class="badge neutral" id="motivationBadge">⚡</div>
             <div>
               <div style="font-weight:950; margin-bottom:4px;" id="motivationTitle">Vamo pra cima! 💥</div>
-              <div id="motivationText">Hoje é dia de fazer acontecer. Foco, ritmo e execução — o almoço grátis é nosso! 🍽️🔥</div>
+              <div id="motivationText">Hoje é dia de executar sem desculpa: atendimento afiado, oferta na mesa e fechamento no caixa. O almoço grátis é NOSSO! 🍽️🔥</div>
             </div>
           </div>
+
+          <div style="height:12px"></div>
+
+          <!-- ESTIMATIVA (FECHADO por padrão) -->
+          <details id="estimateDetails">
+            <summary>
+              <div class="sumLeft">
+                <div class="chev">›</div>
+                <div class="sumTitle">Estimativa: quanto vender para bater a meta 🧠📌</div>
+              </div>
+              <div class="sumMeta" id="estimateMeta">Fechado</div>
+            </summary>
+
+            <div class="panel">
+              <div class="subtitle" style="margin:0;">
+                Configure o “peso” (mix) de cada categoria na meta semanal. Por padrão: <strong>Reparos maior</strong>, <strong>Aparelhos segundo</strong> (lucro ~ R$ 400/un),
+                <strong>Acessórios menor</strong>. Ajuste como quiser. ✅
+              </div>
+
+              <div class="mixGrid">
+                <label>
+                  % Reparos (maior) 🔧
+                  <input id="mixRep" type="number" inputmode="decimal" min="0" step="1" placeholder="Ex: 60" />
+                </label>
+                <label>
+                  % Aparelhos (2º maior) 📱
+                  <input id="mixDev" type="number" inputmode="decimal" min="0" step="1" placeholder="Ex: 30" />
+                </label>
+                <label>
+                  % Acessórios (menor) 🎧
+                  <input id="mixAcc" type="number" inputmode="decimal" min="0" step="1" placeholder="Ex: 10" />
+                </label>
+              </div>
+
+              <div class="mixGrid2">
+                <label>
+                  Ticket médio por reparo (R$) 🔧
+                  <input id="avgRepair" type="number" inputmode="decimal" min="1" step="1" placeholder="Ex: 250" />
+                </label>
+                <label>
+                  Lucro por aparelho (R$) 📱
+                  <input id="profitDevice" type="number" inputmode="decimal" min="1" step="1" placeholder="400" />
+                </label>
+                <label>
+                  Ticket médio por acessório (R$) 🎧
+                  <input id="avgAccessory" type="number" inputmode="decimal" min="1" step="1" placeholder="Ex: 50" />
+                </label>
+              </div>
+
+              <div class="topSummary" style="margin:0;">
+                <div class="topSummaryHead" style="margin-bottom:8px;">
+                  <div class="t1">🎯 Necessário na semana (estimado)</div>
+                  <div class="pill">Σ <strong id="mixTotalPct">100%</strong></div>
+                </div>
+
+                <div class="topSummaryGrid">
+                  <div class="chip rep">
+                    <p class="k">🔧 Reparos</p>
+                    <p class="v" id="needRepMoney">R$ 0,00</p>
+                    <p class="s" id="needRepUnits">≈ 0 reparos/semana</p>
+                  </div>
+                  <div class="chip dev">
+                    <p class="k">📱 Aparelhos (lucro)</p>
+                    <p class="v" id="needDevMoney">R$ 0,00</p>
+                    <p class="s" id="needDevUnits">≈ 0 aparelhos/semana</p>
+                  </div>
+                  <div class="chip acc">
+                    <p class="k">🎧 Acessórios</p>
+                    <p class="v" id="needAccMoney">R$ 0,00</p>
+                    <p class="s" id="needAccUnits">≈ 0 acessórios/semana</p>
+                  </div>
+                </div>
+
+                <div class="subtitle" style="margin-top:10px;">
+                  💡 Dica: se o total das % não der 100%, eu <strong>normalizo automaticamente</strong> (divido proporcionalmente).
+                </div>
+              </div>
+            </div>
+          </details>
 
           <div style="height:12px"></div>
 
@@ -626,7 +795,6 @@
               <button class="btnDanger" id="resetBtn">Zerar semana atual 🧨</button>
             </div>
 
-            <!-- HISTORY -->
             <div class="historyHead">
               <div class="left">
                 <strong>Histórico</strong>
@@ -668,7 +836,7 @@
       { key: "aparelhos", label: "Venda de aparelhos" },
     ];
 
-    const STORAGE_KEY = "meta_semanal_v4_dark"; // atualizado
+    const STORAGE_KEY = "meta_semanal_v5_dark_estimate"; // atualizado
 
     // ===== Helpers =====
     const brl = (n) =>
@@ -686,6 +854,11 @@
     function safeNumber(v){
       const n = Number(v);
       return Number.isFinite(n) ? Math.max(0, n) : 0;
+    }
+
+    function safePositive(v, fallback){
+      const n = Number(v);
+      return Number.isFinite(n) && n > 0 ? n : fallback;
     }
 
     function showToast(msg){
@@ -728,7 +901,16 @@
       return {
         weekNumber: 1,
         current: { data: blankWeekData() },
-        history: [] // items: {weekNumber, closedAt, goal, total, perCat}
+        history: [],
+        estimate: {
+          // mix default (reparos maior, aparelhos 2º, acessórios menor)
+          mixRep: 60,
+          mixDev: 30,
+          mixAcc: 10,
+          avgRepair: 250,     // ticket médio por reparo (ajustável)
+          profitDevice: 400,  // lucro por aparelho (pedido)
+          avgAccessory: 50    // ticket médio acessório (ajustável)
+        }
       };
     }
 
@@ -736,10 +918,19 @@
       const base = defaultState();
       if(!obj || typeof obj !== "object") return base;
 
-      // v4
-      if(obj.current && obj.history && obj.weekNumber) return obj;
+      // já v5
+      if(obj.current && obj.history && obj.weekNumber){
+        obj.estimate = obj.estimate || base.estimate;
+        obj.estimate.mixRep = safeNumber(obj.estimate.mixRep ?? base.estimate.mixRep);
+        obj.estimate.mixDev = safeNumber(obj.estimate.mixDev ?? base.estimate.mixDev);
+        obj.estimate.mixAcc = safeNumber(obj.estimate.mixAcc ?? base.estimate.mixAcc);
+        obj.estimate.avgRepair = safeNumber(obj.estimate.avgRepair ?? base.estimate.avgRepair);
+        obj.estimate.profitDevice = safeNumber(obj.estimate.profitDevice ?? base.estimate.profitDevice);
+        obj.estimate.avgAccessory = safeNumber(obj.estimate.avgAccessory ?? base.estimate.avgAccessory);
+        return obj;
+      }
 
-      // tenta aproveitar algo antigo
+      // aproveita algo antigo
       if(obj.data){
         base.current.data = blankWeekData();
         for (const d of DAYS){
@@ -767,7 +958,7 @@
 
     let state = loadState();
 
-    // ===== Motivation (mais impacto + emojis) =====
+    // ===== Motivation (impacto + emojis) =====
     function motivationFor(pct, remaining){
       const m = {
         badgeClass: "neutral",
@@ -783,7 +974,6 @@
         m.text = "TIME BRABO! Foi na raça e na consistência. Agora é comemorar: almoço grátis garantido! 🚀🔥🥳";
         return m;
       }
-
       if (pct >= 90){
         m.badgeClass = "good";
         m.badge = "🚨";
@@ -791,7 +981,6 @@
         m.text = `Falta só ${brl(remaining)}. Sem freio agora: puxa oferta, fecha combo e garante a vitória! 🥊🔥`;
         return m;
       }
-
       if (pct >= 75){
         m.badgeClass = "neutral";
         m.badge = "🚀";
@@ -799,7 +988,6 @@
         m.text = `Já estamos em 75%+. Falta ${brl(remaining)}. Não tira o pé: constância + fechamento = almoço na mesa! 🍽️⚡`;
         return m;
       }
-
       if (pct >= 50){
         m.badgeClass = "neutral";
         m.badge = "💥";
@@ -807,7 +995,6 @@
         m.text = `Metade feita! Falta ${brl(remaining)}. Bora subir ticket médio e fechar sem deixar cliente “pra depois”! 🔥📈`;
         return m;
       }
-
       if (pct >= 25){
         m.badgeClass = "neutral";
         m.badge = "✅";
@@ -815,17 +1002,16 @@
         m.text = `25%+ já foi! Falta ${brl(remaining)}. Um dia bom puxa o outro — vamos empilhar resultado! 🧱🔥`;
         return m;
       }
-
       if (pct > 0){
         m.badgeClass = "neutral";
         m.badge = "🧠";
         m.title = "RITMO É TUDO — COMEÇA AGORA! ⏱️";
-        m.text = `Primeiros passos feitos. Falta ${brl(remaining)}. Sem ansiedade: foco no próximo cliente e no próximo fechamento! 💪✨`;
+        m.text = `Primeiros passos feitos. Falta ${brl(remaining)}. Foco no próximo cliente e no próximo fechamento! 💪✨`;
       }
       return m;
     }
 
-    // ===== UI build (Days as collapsible) =====
+    // ===== UI build (Days) =====
     const daysBox = document.getElementById("daysBox");
 
     function buildDays(){
@@ -834,9 +1020,8 @@
       for (const d of DAYS){
         const det = document.createElement("details");
         det.id = `day_${d.key}`;
-        // começa fechado
-        const sum = document.createElement("summary");
 
+        const sum = document.createElement("summary");
         sum.innerHTML = `
           <div class="sumLeft">
             <div class="chev">›</div>
@@ -894,13 +1079,20 @@
       }
     }
 
-    // ===== Quick Entry =====
+    // ===== Details meta labels =====
     const quickDetails = document.getElementById("quickDetails");
     const quickMeta = document.getElementById("quickMeta");
     quickDetails.addEventListener("toggle", () => {
       quickMeta.textContent = quickDetails.open ? "Aberto" : "Fechado";
     });
 
+    const estimateDetails = document.getElementById("estimateDetails");
+    const estimateMeta = document.getElementById("estimateMeta");
+    estimateDetails.addEventListener("toggle", () => {
+      estimateMeta.textContent = estimateDetails.open ? "Aberto" : "Fechado";
+    });
+
+    // ===== Quick Entry action =====
     document.getElementById("applyQuickBtn").addEventListener("click", () => {
       const vC = safeNumber(document.getElementById("qConsertos").value);
       const vA = safeNumber(document.getElementById("qAcessorios").value);
@@ -924,6 +1116,86 @@
       render();
       showToast("Totais aplicados na semana ✅🚀");
     });
+
+    // ===== Estimativa inputs (persist) =====
+    const mixRepEl = document.getElementById("mixRep");
+    const mixDevEl = document.getElementById("mixDev");
+    const mixAccEl = document.getElementById("mixAcc");
+    const avgRepairEl = document.getElementById("avgRepair");
+    const profitDeviceEl = document.getElementById("profitDevice");
+    const avgAccessoryEl = document.getElementById("avgAccessory");
+
+    function hydrateEstimateInputs(){
+      mixRepEl.value = String(state.estimate.mixRep ?? 60);
+      mixDevEl.value = String(state.estimate.mixDev ?? 30);
+      mixAccEl.value = String(state.estimate.mixAcc ?? 10);
+      avgRepairEl.value = String(state.estimate.avgRepair ?? 250);
+      profitDeviceEl.value = String(state.estimate.profitDevice ?? 400);
+      avgAccessoryEl.value = String(state.estimate.avgAccessory ?? 50);
+
+      document.getElementById("topProfitUnit").textContent = brl(safePositive(state.estimate.profitDevice, 400));
+    }
+
+    function saveEstimateFromInputs(){
+      state.estimate.mixRep = safeNumber(mixRepEl.value);
+      state.estimate.mixDev = safeNumber(mixDevEl.value);
+      state.estimate.mixAcc = safeNumber(mixAccEl.value);
+      state.estimate.avgRepair = safeNumber(avgRepairEl.value);
+      state.estimate.profitDevice = safeNumber(profitDeviceEl.value);
+      state.estimate.avgAccessory = safeNumber(avgAccessoryEl.value);
+      saveState();
+      renderEstimate();
+      renderTopSummary(); // atualiza lucro/unidade no topo
+    }
+
+    [mixRepEl, mixDevEl, mixAccEl, avgRepairEl, profitDeviceEl, avgAccessoryEl].forEach(el=>{
+      el.addEventListener("input", saveEstimateFromInputs);
+    });
+
+    function normalizedMix(){
+      let r = safeNumber(state.estimate.mixRep);
+      let d = safeNumber(state.estimate.mixDev);
+      let a = safeNumber(state.estimate.mixAcc);
+      const sum = r + d + a;
+
+      if(sum <= 0){
+        r = 60; d = 30; a = 10;
+        return { r, d, a, sum: 100 };
+      }
+      // normaliza p/ 100
+      const rr = (r / sum) * 100;
+      const dd = (d / sum) * 100;
+      const aa = 100 - rr - dd; // ajusta centavos
+      return { r: rr, d: dd, a: aa, sum: 100 };
+    }
+
+    function renderEstimate(){
+      const mix = normalizedMix();
+      document.getElementById("mixTotalPct").textContent = "100%";
+
+      const avgRepair = safePositive(state.estimate.avgRepair, 250);
+      const profitDevice = safePositive(state.estimate.profitDevice, 400);
+      const avgAccessory = safePositive(state.estimate.avgAccessory, 50);
+
+      const needRepMoney = GOAL * (mix.r/100);
+      const needDevMoney = GOAL * (mix.d/100);
+      const needAccMoney = GOAL * (mix.a/100);
+
+      const repUnits = Math.ceil(needRepMoney / avgRepair);
+      const devUnits = Math.ceil(needDevMoney / profitDevice); // lucro/unidade (pedido)
+      const accUnits = Math.ceil(needAccMoney / avgAccessory);
+
+      document.getElementById("needRepMoney").textContent = brl(needRepMoney);
+      document.getElementById("needDevMoney").textContent = brl(needDevMoney);
+      document.getElementById("needAccMoney").textContent = brl(needAccMoney);
+
+      document.getElementById("needRepUnits").textContent = `≈ ${repUnits} reparos/semana (ticket ~ ${brl(avgRepair)})`;
+      document.getElementById("needDevUnits").textContent = `≈ ${devUnits} aparelhos/semana (lucro ~ ${brl(profitDevice)}/un)`;
+      document.getElementById("needAccUnits").textContent = `≈ ${accUnits} acessórios/semana (ticket ~ ${brl(avgAccessory)})`;
+
+      // atualiza lucro no topo
+      document.getElementById("topProfitUnit").textContent = brl(profitDevice);
+    }
 
     // ===== History render =====
     function renderHistory(){
@@ -1002,7 +1274,36 @@
       }
     }
 
-    // ===== Render =====
+    // ===== Resumo no topo (parte superior) =====
+    function renderTopSummary(){
+      const { total, perCat } = sumWeekData(state.current.data);
+      const pct = clamp((total / GOAL) * 100, 0, 999);
+
+      document.getElementById("topPct").textContent = `${Math.floor(pct)}%`;
+      document.getElementById("topRep").textContent = brl(perCat.consertos);
+      document.getElementById("topDev").textContent = brl(perCat.aparelhos);
+      document.getElementById("topAcc").textContent = brl(perCat.acessorios);
+
+      const remaining = Math.max(0, GOAL - total);
+      document.getElementById("topRepS").textContent = `🎯 Ajuda na meta: foco no ticket médio`;
+      document.getElementById("topAccS").textContent = `⚡ Upsell no balcão: “já leva junto?”`;
+
+      const profitDevice = safePositive(state.estimate.profitDevice, 400);
+      document.getElementById("topProfitUnit").textContent = brl(profitDevice);
+      document.getElementById("topDevS").innerHTML = `Lucro estimado/unidade: <strong>${brl(profitDevice)}</strong>`;
+
+      // Se quiser, mostra o “faltam X aparelhos” só pelo lucro (extra útil)
+      const approxDevicesToGoal = Math.ceil(remaining / profitDevice);
+      if (remaining > 0) {
+        document.getElementById("topDevS").innerHTML =
+          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Para cobrir o restante só com aparelhos: <strong>~${approxDevicesToGoal}</strong> 📱`;
+      } else {
+        document.getElementById("topDevS").innerHTML =
+          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Meta batida! 🏆`;
+      }
+    }
+
+    // ===== Render geral =====
     function render(){
       const { total, perCat, perDay } = sumWeekData(state.current.data);
       const pct = clamp((total / GOAL) * 100, 0, 999);
@@ -1041,6 +1342,8 @@
       document.getElementById("weekLabel").textContent = getWeekLabel() + ` • Semana ${state.weekNumber}`;
       document.getElementById("goalLabel").textContent = brl(GOAL);
 
+      renderTopSummary();
+      renderEstimate();
       renderHistory();
     }
 
@@ -1099,7 +1402,14 @@
       }
 
       buildDays();
+
+      // details labels
       quickMeta.textContent = "Fechado";
+      estimateMeta.textContent = "Fechado";
+
+      // estimate inputs
+      hydrateEstimateInputs();
+
       render();
     })();
   </script>
