@@ -836,13 +836,30 @@
       { key: "aparelhos", label: "Venda de aparelhos" },
     ];
 
-    const STORAGE_KEY = "meta_semanal_v5_dark_estimate"; // atualizado
+    const STORAGE_KEY = "meta_semanal_v5_dark_estimate_fixed"; // ✅ nova chave p/ evitar conflito
 
     // ===== Helpers =====
     const brl = (n) =>
       new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n || 0);
 
     function clamp(n, min, max){ return Math.min(Math.max(n, min), max); }
+    function safeNumber(v){ const n = Number(v); return Number.isFinite(n) ? Math.max(0, n) : 0; }
+    function safePositive(v, fallback){ const n = Number(v); return (Number.isFinite(n) && n > 0) ? n : fallback; }
+
+    // ✅ Anti-crash helpers (resolve seu erro do F12)
+    function $(id){ return document.getElementById(id); }
+    function setText(id, value){
+      const el = $(id);
+      if(!el) return false;
+      el.textContent = value;
+      return true;
+    }
+    function setHTML(id, value){
+      const el = $(id);
+      if(!el) return false;
+      el.innerHTML = value;
+      return true;
+    }
 
     function getWeekLabel(){
       const now = new Date();
@@ -851,18 +868,8 @@
       return `Semana de ${dd}/${mm}`;
     }
 
-    function safeNumber(v){
-      const n = Number(v);
-      return Number.isFinite(n) ? Math.max(0, n) : 0;
-    }
-
-    function safePositive(v, fallback){
-      const n = Number(v);
-      return Number.isFinite(n) && n > 0 ? n : fallback;
-    }
-
     function showToast(msg){
-      const el = document.getElementById("toast");
+      const el = $("toast");
       el.textContent = msg;
       el.classList.add("show");
       window.clearTimeout(showToast._t);
@@ -873,7 +880,6 @@
       let total = 0;
       const perCat = { consertos:0, acessorios:0, aparelhos:0 };
       const perDay = {};
-
       for (const d of DAYS){
         let dayTotal = 0;
         for (const c of CATS){
@@ -903,13 +909,12 @@
         current: { data: blankWeekData() },
         history: [],
         estimate: {
-          // mix default (reparos maior, aparelhos 2º, acessórios menor)
           mixRep: 60,
           mixDev: 30,
           mixAcc: 10,
-          avgRepair: 250,     // ticket médio por reparo (ajustável)
-          profitDevice: 400,  // lucro por aparelho (pedido)
-          avgAccessory: 50    // ticket médio acessório (ajustável)
+          avgRepair: 250,
+          profitDevice: 400,
+          avgAccessory: 50
         }
       };
     }
@@ -918,28 +923,28 @@
       const base = defaultState();
       if(!obj || typeof obj !== "object") return base;
 
-      // já v5
-      if(obj.current && obj.history && obj.weekNumber){
-        obj.estimate = obj.estimate || base.estimate;
-        obj.estimate.mixRep = safeNumber(obj.estimate.mixRep ?? base.estimate.mixRep);
-        obj.estimate.mixDev = safeNumber(obj.estimate.mixDev ?? base.estimate.mixDev);
-        obj.estimate.mixAcc = safeNumber(obj.estimate.mixAcc ?? base.estimate.mixAcc);
-        obj.estimate.avgRepair = safeNumber(obj.estimate.avgRepair ?? base.estimate.avgRepair);
-        obj.estimate.profitDevice = safeNumber(obj.estimate.profitDevice ?? base.estimate.profitDevice);
-        obj.estimate.avgAccessory = safeNumber(obj.estimate.avgAccessory ?? base.estimate.avgAccessory);
-        return obj;
-      }
+      obj.weekNumber = safeNumber(obj.weekNumber ?? 1) || 1;
+      obj.current = obj.current || base.current;
+      obj.current.data = obj.current.data || blankWeekData();
 
-      // aproveita algo antigo
-      if(obj.data){
-        base.current.data = blankWeekData();
-        for (const d of DAYS){
-          for (const c of CATS){
-            base.current.data[d.key][c.key] = safeNumber(obj.data?.[d.key]?.[c.key] ?? 0);
-          }
+      for (const d of DAYS){
+        obj.current.data[d.key] = obj.current.data[d.key] || {};
+        for (const c of CATS){
+          obj.current.data[d.key][c.key] = safeNumber(obj.current.data?.[d.key]?.[c.key] ?? 0);
         }
       }
-      return base;
+
+      obj.history = Array.isArray(obj.history) ? obj.history : [];
+      obj.estimate = obj.estimate || base.estimate;
+
+      obj.estimate.mixRep = safeNumber(obj.estimate.mixRep ?? base.estimate.mixRep);
+      obj.estimate.mixDev = safeNumber(obj.estimate.mixDev ?? base.estimate.mixDev);
+      obj.estimate.mixAcc = safeNumber(obj.estimate.mixAcc ?? base.estimate.mixAcc);
+      obj.estimate.avgRepair = safeNumber(obj.estimate.avgRepair ?? base.estimate.avgRepair);
+      obj.estimate.profitDevice = safeNumber(obj.estimate.profitDevice ?? base.estimate.profitDevice);
+      obj.estimate.avgAccessory = safeNumber(obj.estimate.avgAccessory ?? base.estimate.avgAccessory);
+
+      return obj;
     }
 
     function loadState(){
@@ -958,65 +963,36 @@
 
     let state = loadState();
 
-    // ===== Motivation (impacto + emojis) =====
+    // ===== Motivation =====
     function motivationFor(pct, remaining){
-      const m = {
+      const base = {
         badgeClass: "neutral",
         badge: "⚡",
         title: "Vamo pra cima! 💥",
-        text: "Hoje é dia de executar sem desculpa: atendimento afiado, oferta na mesa e fechamento no caixa. O almoço grátis é NOSSO! 🍽️🔥"
+        text: "Atendimento afiado + proposta na mesa + fechamento no caixa. O almoço grátis é NOSSO! 🍽️🔥"
       };
 
-      if (pct >= 100){
-        m.badgeClass = "good";
-        m.badge = "🏆";
-        m.title = "META BATIDA!!! É CAMPEÃO! 🎉🍽️";
-        m.text = "TIME BRABO! Foi na raça e na consistência. Agora é comemorar: almoço grátis garantido! 🚀🔥🥳";
-        return m;
-      }
-      if (pct >= 90){
-        m.badgeClass = "good";
-        m.badge = "🚨";
-        m.title = "FALTAM MIGALHAS! ÚLTIMO ATAQUE! 🚀";
-        m.text = `Falta só ${brl(remaining)}. Sem freio agora: puxa oferta, fecha combo e garante a vitória! 🥊🔥`;
-        return m;
-      }
-      if (pct >= 75){
-        m.badgeClass = "neutral";
-        m.badge = "🚀";
-        m.title = "RETA FINAL — MANTÉM A PRESSÃO! 💪";
-        m.text = `Já estamos em 75%+. Falta ${brl(remaining)}. Não tira o pé: constância + fechamento = almoço na mesa! 🍽️⚡`;
-        return m;
-      }
-      if (pct >= 50){
-        m.badgeClass = "neutral";
-        m.badge = "💥";
-        m.title = "META NO RADAR — AGORA ACELERA! 🏎️";
-        m.text = `Metade feita! Falta ${brl(remaining)}. Bora subir ticket médio e fechar sem deixar cliente “pra depois”! 🔥📈`;
-        return m;
-      }
-      if (pct >= 25){
-        m.badgeClass = "neutral";
-        m.badge = "✅";
-        m.title = "COMEÇO FORTE — CONTINUA NO RITMO! 🎯";
-        m.text = `25%+ já foi! Falta ${brl(remaining)}. Um dia bom puxa o outro — vamos empilhar resultado! 🧱🔥`;
-        return m;
-      }
-      if (pct > 0){
-        m.badgeClass = "neutral";
-        m.badge = "🧠";
-        m.title = "RITMO É TUDO — COMEÇA AGORA! ⏱️";
-        m.text = `Primeiros passos feitos. Falta ${brl(remaining)}. Foco no próximo cliente e no próximo fechamento! 💪✨`;
-      }
-      return m;
+      if (pct >= 100) return { badgeClass:"good", badge:"🏆", title:"META BATIDA!!! É CAMPEÃO! 🎉🍽️",
+        text:"TIME BRABO! Foi na raça e na consistência. Agora é comemorar: almoço grátis garantido! 🚀🔥🥳" };
+      if (pct >= 90) return { badgeClass:"good", badge:"🚨", title:"FALTAM MIGALHAS! ÚLTIMO ATAQUE! 🚀",
+        text:`Falta só ${brl(remaining)}. Sem freio agora: puxa oferta, fecha combo e garante a vitória! 🥊🔥` };
+      if (pct >= 75) return { badgeClass:"neutral", badge:"🚀", title:"RETA FINAL — MANTÉM A PRESSÃO! 💪",
+        text:`Falta ${brl(remaining)}. Não tira o pé: constância + fechamento = almoço na mesa! 🍽️⚡` };
+      if (pct >= 50) return { badgeClass:"neutral", badge:"💥", title:"META NO RADAR — AGORA ACELERA! 🏎️",
+        text:`Falta ${brl(remaining)}. Bora subir ticket médio e fechar sem deixar cliente “pra depois”! 🔥📈` };
+      if (pct >= 25) return { badgeClass:"neutral", badge:"✅", title:"COMEÇO FORTE — CONTINUA NO RITMO! 🎯",
+        text:`Falta ${brl(remaining)}. Um dia bom puxa o outro — vamos empilhar resultado! 🧱🔥` };
+      if (pct > 0) return { badgeClass:"neutral", badge:"🧠", title:"RITMO É TUDO — COMEÇA AGORA! ⏱️",
+        text:`Falta ${brl(remaining)}. Foco no próximo cliente e no próximo fechamento! 💪✨` };
+
+      return base;
     }
 
     // ===== UI build (Days) =====
-    const daysBox = document.getElementById("daysBox");
+    const daysBox = $("daysBox");
 
     function buildDays(){
       daysBox.innerHTML = "";
-
       for (const d of DAYS){
         const det = document.createElement("details");
         det.id = `day_${d.key}`;
@@ -1068,7 +1044,7 @@
 
     function syncDayInputs(){
       for (const d of DAYS){
-        const det = document.getElementById(`day_${d.key}`);
+        const det = $(`day_${d.key}`);
         if(!det) continue;
         const inputs = det.querySelectorAll('input[type="number"]');
         inputs.forEach((inp, idx)=>{
@@ -1079,24 +1055,24 @@
       }
     }
 
-    // ===== Details meta labels =====
-    const quickDetails = document.getElementById("quickDetails");
-    const quickMeta = document.getElementById("quickMeta");
+    // ===== Quick + Estimate details meta =====
+    const quickDetails = $("quickDetails");
+    const quickMeta = $("quickMeta");
     quickDetails.addEventListener("toggle", () => {
       quickMeta.textContent = quickDetails.open ? "Aberto" : "Fechado";
     });
 
-    const estimateDetails = document.getElementById("estimateDetails");
-    const estimateMeta = document.getElementById("estimateMeta");
+    const estimateDetails = $("estimateDetails");
+    const estimateMeta = $("estimateMeta");
     estimateDetails.addEventListener("toggle", () => {
       estimateMeta.textContent = estimateDetails.open ? "Aberto" : "Fechado";
     });
 
-    // ===== Quick Entry action =====
-    document.getElementById("applyQuickBtn").addEventListener("click", () => {
-      const vC = safeNumber(document.getElementById("qConsertos").value);
-      const vA = safeNumber(document.getElementById("qAcessorios").value);
-      const vP = safeNumber(document.getElementById("qAparelhos").value);
+    // ===== Quick action =====
+    $("applyQuickBtn").addEventListener("click", () => {
+      const vC = safeNumber($("qConsertos").value);
+      const vA = safeNumber($("qAcessorios").value);
+      const vP = safeNumber($("qAparelhos").value);
       const total = vC + vA + vP;
 
       if(total <= 0){
@@ -1105,7 +1081,6 @@
       }
 
       state.current.data = blankWeekData();
-
       const targetDay = "sab";
       state.current.data[targetDay].consertos = vC;
       state.current.data[targetDay].acessorios = vA;
@@ -1117,13 +1092,13 @@
       showToast("Totais aplicados na semana ✅🚀");
     });
 
-    // ===== Estimativa inputs (persist) =====
-    const mixRepEl = document.getElementById("mixRep");
-    const mixDevEl = document.getElementById("mixDev");
-    const mixAccEl = document.getElementById("mixAcc");
-    const avgRepairEl = document.getElementById("avgRepair");
-    const profitDeviceEl = document.getElementById("profitDevice");
-    const avgAccessoryEl = document.getElementById("avgAccessory");
+    // ===== Estimate inputs (persist) =====
+    const mixRepEl = $("mixRep");
+    const mixDevEl = $("mixDev");
+    const mixAccEl = $("mixAcc");
+    const avgRepairEl = $("avgRepair");
+    const profitDeviceEl = $("profitDevice");
+    const avgAccessoryEl = $("avgAccessory");
 
     function hydrateEstimateInputs(){
       mixRepEl.value = String(state.estimate.mixRep ?? 60);
@@ -1132,8 +1107,7 @@
       avgRepairEl.value = String(state.estimate.avgRepair ?? 250);
       profitDeviceEl.value = String(state.estimate.profitDevice ?? 400);
       avgAccessoryEl.value = String(state.estimate.avgAccessory ?? 50);
-
-      document.getElementById("topProfitUnit").textContent = brl(safePositive(state.estimate.profitDevice, 400));
+      setText("topProfitUnit", brl(safePositive(state.estimate.profitDevice, 400)));
     }
 
     function saveEstimateFromInputs(){
@@ -1145,7 +1119,7 @@
       state.estimate.avgAccessory = safeNumber(avgAccessoryEl.value);
       saveState();
       renderEstimate();
-      renderTopSummary(); // atualiza lucro/unidade no topo
+      renderTopSummary();
     }
 
     [mixRepEl, mixDevEl, mixAccEl, avgRepairEl, profitDeviceEl, avgAccessoryEl].forEach(el=>{
@@ -1159,19 +1133,16 @@
       const sum = r + d + a;
 
       if(sum <= 0){
-        r = 60; d = 30; a = 10;
-        return { r, d, a, sum: 100 };
+        return { r:60, d:30, a:10 };
       }
-      // normaliza p/ 100
       const rr = (r / sum) * 100;
       const dd = (d / sum) * 100;
-      const aa = 100 - rr - dd; // ajusta centavos
-      return { r: rr, d: dd, a: aa, sum: 100 };
+      const aa = 100 - rr - dd;
+      return { r: rr, d: dd, a: aa };
     }
 
     function renderEstimate(){
       const mix = normalizedMix();
-      document.getElementById("mixTotalPct").textContent = "100%";
 
       const avgRepair = safePositive(state.estimate.avgRepair, 250);
       const profitDevice = safePositive(state.estimate.profitDevice, 400);
@@ -1182,24 +1153,57 @@
       const needAccMoney = GOAL * (mix.a/100);
 
       const repUnits = Math.ceil(needRepMoney / avgRepair);
-      const devUnits = Math.ceil(needDevMoney / profitDevice); // lucro/unidade (pedido)
+      const devUnits = Math.ceil(needDevMoney / profitDevice);
       const accUnits = Math.ceil(needAccMoney / avgAccessory);
 
-      document.getElementById("needRepMoney").textContent = brl(needRepMoney);
-      document.getElementById("needDevMoney").textContent = brl(needDevMoney);
-      document.getElementById("needAccMoney").textContent = brl(needAccMoney);
+      setText("mixTotalPct", "100%");
+      setText("needRepMoney", brl(needRepMoney));
+      setText("needDevMoney", brl(needDevMoney));
+      setText("needAccMoney", brl(needAccMoney));
 
-      document.getElementById("needRepUnits").textContent = `≈ ${repUnits} reparos/semana (ticket ~ ${brl(avgRepair)})`;
-      document.getElementById("needDevUnits").textContent = `≈ ${devUnits} aparelhos/semana (lucro ~ ${brl(profitDevice)}/un)`;
-      document.getElementById("needAccUnits").textContent = `≈ ${accUnits} acessórios/semana (ticket ~ ${brl(avgAccessory)})`;
+      setText("needRepUnits", `≈ ${repUnits} reparos/semana (ticket ~ ${brl(avgRepair)})`);
+      setText("needDevUnits", `≈ ${devUnits} aparelhos/semana (lucro ~ ${brl(profitDevice)}/un)`);
+      setText("needAccUnits", `≈ ${accUnits} acessórios/semana (ticket ~ ${brl(avgAccessory)})`);
 
-      // atualiza lucro no topo
-      document.getElementById("topProfitUnit").textContent = brl(profitDevice);
+      setText("topProfitUnit", brl(profitDevice));
     }
 
-    // ===== History render =====
+    // ✅ FIX: renderTopSummary NÃO quebra mais (resolve seu erro do F12)
+    function renderTopSummary(){
+      const { total, perCat } = sumWeekData(state.current.data);
+      const pct = clamp((total / GOAL) * 100, 0, 999);
+
+      setText("topPct", `${Math.floor(pct)}%`);
+      setText("topRep", brl(perCat.consertos));
+      setText("topDev", brl(perCat.aparelhos));
+      setText("topAcc", brl(perCat.acessorios));
+
+      const remaining = Math.max(0, GOAL - total);
+
+      setText("topRepS", "🎯 Reparos puxam a meta — mantém o ticket médio alto!");
+      setText("topAccS", "⚡ Acessórios: upsell no balcão (“já leva junto?”)");
+
+      const profitDevice = safePositive(state.estimate?.profitDevice, 400);
+      setText("topProfitUnit", brl(profitDevice));
+
+      const approxDevicesToGoal = Math.ceil(remaining / profitDevice);
+
+      if (remaining > 0) {
+        setHTML(
+          "topDevS",
+          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Para cobrir o restante só com aparelhos: <strong>~${approxDevicesToGoal}</strong> 📱`
+        );
+      } else {
+        setHTML(
+          "topDevS",
+          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Meta batida! 🏆`
+        );
+      }
+    }
+
+    // ===== History =====
     function renderHistory(){
-      const box = document.getElementById("historyList");
+      const box = $("historyList");
       box.innerHTML = "";
 
       if (!state.history.length){
@@ -1274,73 +1278,44 @@
       }
     }
 
-    // ===== Resumo no topo (parte superior) =====
-    function renderTopSummary(){
-      const { total, perCat } = sumWeekData(state.current.data);
-      const pct = clamp((total / GOAL) * 100, 0, 999);
-
-      document.getElementById("topPct").textContent = `${Math.floor(pct)}%`;
-      document.getElementById("topRep").textContent = brl(perCat.consertos);
-      document.getElementById("topDev").textContent = brl(perCat.aparelhos);
-      document.getElementById("topAcc").textContent = brl(perCat.acessorios);
-
-      const remaining = Math.max(0, GOAL - total);
-      document.getElementById("topRepS").textContent = `🎯 Ajuda na meta: foco no ticket médio`;
-      document.getElementById("topAccS").textContent = `⚡ Upsell no balcão: “já leva junto?”`;
-
-      const profitDevice = safePositive(state.estimate.profitDevice, 400);
-      document.getElementById("topProfitUnit").textContent = brl(profitDevice);
-      document.getElementById("topDevS").innerHTML = `Lucro estimado/unidade: <strong>${brl(profitDevice)}</strong>`;
-
-      // Se quiser, mostra o “faltam X aparelhos” só pelo lucro (extra útil)
-      const approxDevicesToGoal = Math.ceil(remaining / profitDevice);
-      if (remaining > 0) {
-        document.getElementById("topDevS").innerHTML =
-          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Para cobrir o restante só com aparelhos: <strong>~${approxDevicesToGoal}</strong> 📱`;
-      } else {
-        document.getElementById("topDevS").innerHTML =
-          `Lucro/un: <strong>${brl(profitDevice)}</strong> • Meta batida! 🏆`;
-      }
-    }
-
-    // ===== Render geral =====
+    // ===== Render =====
     function render(){
       const { total, perCat, perDay } = sumWeekData(state.current.data);
       const pct = clamp((total / GOAL) * 100, 0, 999);
       const pctShown = Math.floor(pct);
       const remaining = Math.max(0, GOAL - total);
 
-      document.getElementById("totalLabel").textContent = brl(total);
-      document.getElementById("pctLabel").textContent = `${pctShown}%`;
-      document.getElementById("remainingLabel").textContent = brl(remaining);
-      document.getElementById("barFill").style.width = `${clamp(pct, 0, 100)}%`;
+      setText("totalLabel", brl(total));
+      setText("pctLabel", `${pctShown}%`);
+      setText("remainingLabel", brl(remaining));
+      $("barFill").style.width = `${clamp(pct, 0, 100)}%`;
 
-      document.getElementById("sumConsertos").textContent = brl(perCat.consertos);
-      document.getElementById("sumAcessorios").textContent = brl(perCat.acessorios);
-      document.getElementById("sumAparelhos").textContent = brl(perCat.aparelhos);
+      setText("sumConsertos", brl(perCat.consertos));
+      setText("sumAcessorios", brl(perCat.acessorios));
+      setText("sumAparelhos", brl(perCat.aparelhos));
 
       const daysWithAny = DAYS.reduce((acc,d)=> acc + (perDay[d.key] > 0 ? 1 : 0), 0);
       const avg = daysWithAny > 0 ? total / daysWithAny : 0;
-      document.getElementById("avgPerDay").textContent = brl(avg);
+      setText("avgPerDay", brl(avg));
 
       const daysRemaining = Math.max(0, DAYS.length - daysWithAny);
       const needed = daysRemaining > 0 ? remaining / daysRemaining : remaining;
-      document.getElementById("neededPerDay").textContent = brl(needed);
+      setText("neededPerDay", brl(needed));
 
       for (const d of DAYS){
-        const meta = document.getElementById(`meta_${d.key}`);
+        const meta = $(`meta_${d.key}`);
         if(meta) meta.textContent = "Total: " + brl(perDay[d.key]);
       }
 
       const mot = motivationFor(pct, remaining);
-      const badge = document.getElementById("motivationBadge");
+      const badge = $("motivationBadge");
       badge.className = `badge ${mot.badgeClass}`;
       badge.textContent = mot.badge;
-      document.getElementById("motivationTitle").textContent = mot.title;
-      document.getElementById("motivationText").textContent = mot.text;
+      setText("motivationTitle", mot.title);
+      setText("motivationText", mot.text);
 
-      document.getElementById("weekLabel").textContent = getWeekLabel() + ` • Semana ${state.weekNumber}`;
-      document.getElementById("goalLabel").textContent = brl(GOAL);
+      setText("weekLabel", getWeekLabel() + ` • Semana ${state.weekNumber}`);
+      setText("goalLabel", brl(GOAL));
 
       renderTopSummary();
       renderEstimate();
@@ -1348,7 +1323,7 @@
     }
 
     // ===== Actions =====
-    document.getElementById("resetBtn").addEventListener("click", () => {
+    $("resetBtn").addEventListener("click", () => {
       state.current.data = blankWeekData();
       saveState();
       syncDayInputs();
@@ -1356,7 +1331,7 @@
       showToast("Semana atual zerada ✅");
     });
 
-    document.getElementById("closeWeekBtn").addEventListener("click", () => {
+    $("closeWeekBtn").addEventListener("click", () => {
       const { total, perCat } = sumWeekData(state.current.data);
 
       state.history.push({
@@ -1370,9 +1345,9 @@
       state.weekNumber += 1;
       state.current.data = blankWeekData();
 
-      document.getElementById("qConsertos").value = "";
-      document.getElementById("qAcessorios").value = "";
-      document.getElementById("qAparelhos").value = "";
+      $("qConsertos").value = "";
+      $("qAcessorios").value = "";
+      $("qAparelhos").value = "";
 
       saveState();
       syncDayInputs();
@@ -1381,7 +1356,7 @@
       showToast(total >= GOAL ? "META BATIDA! Semana salva 🏆🔥" : "Semana salva — volta mais forte! 💪⚡");
     });
 
-    document.getElementById("clearHistoryBtn").addEventListener("click", () => {
+    $("clearHistoryBtn").addEventListener("click", () => {
       state.history = [];
       saveState();
       render();
@@ -1391,25 +1366,10 @@
     // ===== Init =====
     (function init(){
       state = migrate(state);
-
-      state.current = state.current || { data: blankWeekData() };
-      state.current.data = state.current.data || blankWeekData();
-      for (const d of DAYS){
-        state.current.data[d.key] = state.current.data[d.key] || {};
-        for (const c of CATS){
-          state.current.data[d.key][c.key] = safeNumber(state.current.data?.[d.key]?.[c.key] ?? 0);
-        }
-      }
-
       buildDays();
-
-      // details labels
       quickMeta.textContent = "Fechado";
       estimateMeta.textContent = "Fechado";
-
-      // estimate inputs
       hydrateEstimateInputs();
-
       render();
     })();
   </script>
